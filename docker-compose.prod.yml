@@ -1,0 +1,23 @@
+# Production overrides — use with:
+# docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+  mysql:
+    ports: []   # Don't expose MySQL port in production
+    restart: always
+
+  backend:
+    environment:
+      NODE_ENV: production
+    restart: always
+    # No hot-reload, no dev tools
+
+  frontend:
+    restart: always
+
+  nginx:
+    restart: always
+    # For HTTPS: mount your certs and update nginx.conf with SSL block
+    # volumes:
+    #   - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    #   - /etc/letsencrypt:/etc/letsencrypt:ro

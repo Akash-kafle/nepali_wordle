@@ -1,0 +1,18 @@
+# =============================================================
+# docker-compose.frontend.yml — Frontend static container only
+# Exposes the frontend game UI, which connects to the backend API.
+# =============================================================
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nwg-frontend
+    restart: unless-stopped
+    ports:
+      - "8889:80"  # Expose frontend UI on port 8889
+    environment:
+      # Point to your separately deployed backend API URL:
+      # e.g. "https://api.nepaliwordgame.com/api" or "http://localhost:3000/api"
+      API_BASE: ${API_BASE:-/api}

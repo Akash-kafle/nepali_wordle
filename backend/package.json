@@ -1,0 +1,37 @@
+{
+  "name": "nepali-word-game-backend",
+  "version": "1.0.0",
+  "description": "Backend API for the Nepali Word Game",
+  "main": "src/interfaces/server.js",
+  "scripts": {
+    "start": "node src/interfaces/server.js",
+    "dev": "nodemon src/interfaces/server.js",
+    "test": "jest --runInBand --forceExit"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dictionary-ne": "^2.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.10.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^9.0.3",
+    "nspell": "^2.1.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.4",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  }
+}
