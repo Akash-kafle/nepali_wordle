@@ -183,6 +183,10 @@ const App = (() => {
 
   // ---- Navigation buttons ----
   function _bindNavButtons() {
+    document.getElementById('nav-home-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      showView('game');
+    });
     document.getElementById('nav-auth-btn').addEventListener('click', () => showView('auth'));
     document.getElementById('nav-logout-btn').addEventListener('click', _logout);
     document.getElementById('nav-stats-btn').addEventListener('click', () => {

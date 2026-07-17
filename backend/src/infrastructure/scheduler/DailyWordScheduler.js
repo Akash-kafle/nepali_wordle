@@ -24,6 +24,9 @@ class DailyWordScheduler {
     });
 
     console.log('[Scheduler] Daily word scheduler started. Runs at 18:15 UTC (00:00 NPT).');
+
+    // Run immediately on startup to ensure today's challenge is active (idempotent)
+    this._publishDailyWord();
   }
 
   async _publishDailyWord() {
