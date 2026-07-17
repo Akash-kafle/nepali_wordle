@@ -56,8 +56,8 @@ backend/src/
 
 ### 1. Clone & configure
 ```bash
-git clone <your-repo-url>
-cd Anup
+git clone <https://github.com/Akash-kafle/nepali_wordle.git>
+cd nepali_wordle
 cp .env.example .env
 # Edit .env — change passwords, JWT_SECRET, and SMTP credentials!
 ```
@@ -134,8 +134,8 @@ This project is structured to be deployed completely for free using **GitHub Pag
 2. Click **New Project** → **Provision MySQL**.
 3. Once the database is ready, go to the **Variables** tab of the MySQL service and copy the **`MYSQL_URL`** (or connection string).
 4. Connect to your database using any tool (e.g., MySQL Workbench, Beekeeper Studio, or command line) and run:
-   * First: [database/schema.sql](file:///home/monarch/Desktop/Anup/database/schema.sql) to create the tables.
-   * Second: [database/seed.sql](file:///home/monarch/Desktop/Anup/database/seed.sql) to load initial Nepali words.
+   * First: [database/schema.sql](./database/schema.sql) to create the tables.
+   * Second: [database/seed.sql](./database/seed.sql) to load initial Nepali words.
 
 ---
 
@@ -157,7 +157,7 @@ This project is structured to be deployed completely for free using **GitHub Pag
 ---
 
 #### Phase 3: Frontend Deployment (GitHub Pages)
-1. Open [frontend/config.js](file:///home/monarch/Desktop/Anup/frontend/config.js) and replace `YOUR-RAILWAY-BACKEND-URL` with your actual Railway backend URL:
+1. Open [frontend/config.js](./frontend/config.js) and replace `YOUR-RAILWAY-BACKEND-URL` with your actual Railway backend URL:
    ```javascript
    API_BASE: 'https://backend-production-xxx.up.railway.app/api'
    ```
@@ -261,12 +261,3 @@ If upgrading an existing database:
 ```bash
 mysql -u root -p nepali_word_game < database/migration_001_email_verification.sql
 ```
-
----
-
-## Project Members
-
-- Anup Raj Acharya — BCA 8th Sem, 2079 Batch
-- Samir Rajbhandari — BCA 8th Sem, 2079 Batch
-
-*Tribhuvan University / Texas International College — July 2026*
