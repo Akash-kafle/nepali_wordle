@@ -8,20 +8,46 @@ const nodemailer = require('nodemailer');
 class EmailService {
   constructor() {
     this.frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8888';
+    this.fromAddress = process.env.SMTP_USER || 'noreply@nepaliwordgame.com';
+  }
 
-    // Create reusable transporter
+  /**
+   * Resolves the SMTP host to an IPv4 address to prevent IPv6 connection failures
+   * on environments like Railway.
+   */
+  async _getTransporter() {
+    const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
     const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
-    this.transporter = nodemailer.createTransport({
-      host:   process.env.SMTP_HOST || 'smtp.gmail.com',
+
+    let resolvedHost = smtpHost;
+    let tlsConfig = {};
+
+    // If it's a hostname (contains alphabetic characters), resolve to IPv4
+    if (/[a-zA-Z]/.test(smtpHost)) {
+      try {
+        const dns = require('dns').promises;
+        const addresses = await dns.resolve4(smtpHost);
+        if (addresses && addresses.length > 0) {
+          // Select a random IPv4 address
+          resolvedHost = addresses[Math.floor(Math.random() * addresses.length)];
+          tlsConfig = { servername: smtpHost };
+          console.log(`[Email] Resolved host ${smtpHost} to IPv4: ${resolvedHost}`);
+        }
+      } catch (dnsErr) {
+        console.warn(`[Email] DNS resolution failed for ${smtpHost}, falling back to original hostname:`, dnsErr.message);
+      }
+    }
+
+    return nodemailer.createTransport({
+      host:   resolvedHost,
       port:   smtpPort,
-      secure: smtpPort === 465, // true for 465, false for other ports (like 587)
+      secure: smtpPort === 465,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+      tls: tlsConfig,
     });
-
-    this.fromAddress = process.env.SMTP_USER || 'noreply@nepaliwordgame.com';
   }
 
   /**
@@ -97,7 +123,8 @@ This link expires in 24 hours. If you didn't create an account, you can safely i
 `;
 
     try {
-      await this.transporter.sendMail({
+      const transporter = await this._getTransporter();
+      await transporter.sendMail({
         from:    `"Nepali Word Game" <${this.fromAddress}>`,
         to:      toEmail,
         subject: '✉️ Verify your email — Nepali Word Game',
