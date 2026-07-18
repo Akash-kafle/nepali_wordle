@@ -122,6 +122,39 @@ ${verifyUrl}
 This link expires in 24 hours. If you didn't create an account, you can safely ignore this email.
 `;
 
+    // 1. If RESEND_API_KEY is configured, use Resend's HTTPS API (bypasses Railway's outbound SMTP block)
+    if (process.env.RESEND_API_KEY) {
+      try {
+        console.log('[Email] Sending via Resend HTTPS API...');
+        const fromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+        const response = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: `"Nepali Word Game" <${fromEmail}>`,
+            to: [toEmail],
+            subject: '✉️ Verify your email — Nepali Word Game',
+            html: htmlContent,
+            text: textContent,
+          }),
+        });
+
+        const resData = await response.json();
+        if (!response.ok) {
+          throw new Error(resData.message || `HTTP ${response.status}`);
+        }
+        console.log(`[Email] Verification email sent to ${toEmail} via Resend. ID: ${resData.id}`);
+        return;
+      } catch (err) {
+        console.error(`[Email] Failed to send verification email to ${toEmail} via Resend:`, err.message);
+        // Fallback to SMTP
+      }
+    }
+
+    // 2. Fallback to standard SMTP
     try {
       const transporter = await this._getTransporter();
       await transporter.sendMail({
