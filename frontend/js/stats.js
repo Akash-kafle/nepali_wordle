@@ -64,7 +64,11 @@ const Stats = (() => {
               <div class="modal-stat-label">Win Rate</div>
             </div>
           `;
-        }).catch(() => {});
+        }).catch(err => {
+          if (err.status === 403) {
+            statsEl.innerHTML = '<div style="color:var(--text-accent);font-size:0.85rem;padding:0.5rem 0;">Verify your email to track stats & streaks! ✉️</div>';
+          }
+        });
       }
     }
 
@@ -156,8 +160,12 @@ const Stats = (() => {
           <div class="stat-card-label">Best Streak</div>
         </div>
       `;
-    } catch {
-      grid.innerHTML = '<p style="color:var(--text-muted);text-align:center">Sign in to see stats</p>';
+    } catch (err) {
+      if (err.status === 403) {
+        grid.innerHTML = '<p style="color:var(--text-accent);text-align:center;padding:1rem;">Please verify your email to view stats! ✉️</p>';
+      } else {
+        grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:1rem;">Sign in to see stats</p>';
+      }
     }
 
     document.getElementById('stats-close-btn').onclick = () => modal.classList.add('hidden');

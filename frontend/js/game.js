@@ -270,6 +270,10 @@ const Game = (() => {
   function _endGame(won, word, data) {
     _state.isGameOver = true;
 
+    if (!_state.isPracticeMode) {
+      _updateStreakDisplay();
+    }
+
     setTimeout(() => {
       Stats.showResultModal(won, word, data);
     }, 400);
