@@ -5,7 +5,7 @@
 
 SET NAMES utf8mb4;
 
-USE nepali_word_game;
+-- USE nepali_word_game;
 
 -- -------------------------------------------------------------
 -- Verified 3-akshara Nepali words only

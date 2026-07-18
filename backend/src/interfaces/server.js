@@ -13,6 +13,7 @@ const inputSanitizer = require('./middleware/inputSanitizer');
 const { apiLimiter } = require('./middleware/rateLimiter');
 const { router, wordRepo, challengeRepo } = require('./routes/index');
 const DailyWordScheduler = require('../infrastructure/scheduler/DailyWordScheduler');
+const { initializeDatabase } = require('../infrastructure/database/init');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -58,13 +59,26 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 // ---- Start server ----
-app.listen(PORT, () => {
-  console.log(`[Server] Nepali Word Game API running on port ${PORT}`);
-  console.log(`[Server] Environment: ${process.env.NODE_ENV || 'development'}`);
+async function start() {
+  try {
+    // 1. Check and initialize database tables + seed data
+    await initializeDatabase();
 
-  // Start the daily word scheduler (FR-3)
-  const scheduler = new DailyWordScheduler(wordRepo, challengeRepo);
-  scheduler.start();
-});
+    // 2. Start Express app listener
+    app.listen(PORT, () => {
+      console.log(`[Server] Nepali Word Game API running on port ${PORT}`);
+      console.log(`[Server] Environment: ${process.env.NODE_ENV || 'development'}`);
+
+      // Start the daily word scheduler (FR-3)
+      const scheduler = new DailyWordScheduler(wordRepo, challengeRepo);
+      scheduler.start();
+    });
+  } catch (err) {
+    console.error('[Server] Critical: Failed to initialize database on startup:', err);
+    process.exit(1);
+  }
+}
+
+start();
 
 module.exports = app;

@@ -5,11 +5,11 @@
 
 SET NAMES utf8mb4;
 
-CREATE DATABASE IF NOT EXISTS nepali_word_game
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-
-USE nepali_word_game;
+-- CREATE DATABASE IF NOT EXISTS nepali_word_game
+--   CHARACTER SET utf8mb4
+--   COLLATE utf8mb4_unicode_ci;
+-- 
+-- USE nepali_word_game;
 
 -- -------------------------------------------------------------
 -- users

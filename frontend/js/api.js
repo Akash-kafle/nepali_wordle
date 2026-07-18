@@ -2,7 +2,7 @@
 // api.js — Fetch wrapper with JWT auth
 // =============================================================
 
-const API_BASE = window.CONFIG?.API_BASE || '/api';
+const API_BASE = (window.CONFIG?.API_BASE || '/api').replace(/\/+$/, '');
 
 const Api = (() => {
   function _getToken() {
