@@ -10,10 +10,11 @@ class EmailService {
     this.frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8888';
 
     // Create reusable transporter
+    const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
     this.transporter = nodemailer.createTransport({
       host:   process.env.SMTP_HOST || 'smtp.gmail.com',
-      port:   parseInt(process.env.SMTP_PORT || '587', 10),
-      secure: false, // true for 465, false for other ports
+      port:   smtpPort,
+      secure: smtpPort === 465, // true for 465, false for other ports (like 587)
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
