@@ -33,10 +33,22 @@ app.use(helmet({
 }));
 
 // ---- CORS ----
+// ---- CORS Configuration ----
+const getAllowedOrigin = () => {
+  const origin = process.env.CORS_ORIGIN;
+  if (!origin || origin === '*') {
+    return 'http://localhost:8888';
+  }
+  try {
+    // Extract protocol + host to handle cases where a path or trailing slash is included
+    return new URL(origin).origin;
+  } catch {
+    return origin.replace(/\/+$/, '');
+  }
+};
+
 app.use(cors({
-  origin:      process.env.CORS_ORIGIN && process.env.CORS_ORIGIN !== '*' 
-                 ? process.env.CORS_ORIGIN 
-                 : 'http://localhost:8888',
+  origin:      getAllowedOrigin(),
   credentials: true,
   methods:     ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
