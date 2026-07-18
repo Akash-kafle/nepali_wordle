@@ -31,6 +31,15 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Inject API URL
+        env:
+          API_BASE: ${{ vars.API_BASE }}
+        run: |
+          # Fallback URL if API_BASE is not configured in GitHub variables yet
+          API_URL="${API_BASE:-https://YOUR-RAILWAY-BACKEND-URL.up.railway.app/api}"
+          echo "Injecting API URL: $API_URL"
+          sed -i "s|__API_BASE__|$API_URL|g" frontend/config.js
+
       - name: Upload frontend folder as artifact
         uses: actions/upload-pages-artifact@v3
         with:
